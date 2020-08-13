@@ -2159,23 +2159,14 @@ public class ImsManager {
     public boolean updateRttConfigValue() {
         boolean isCarrierSupported =
                 getBooleanCarrierConfig(CarrierConfigManager.KEY_RTT_SUPPORTED_BOOL);
-        int defaultRttMode =
-                getIntCarrierConfig(CarrierConfigManager.KEY_DEFAULT_RTT_MODE_INT);
-        int rttMode = Settings.Secure.getInt(mContext.getContentResolver(),
-                Settings.Secure.RTT_CALLING_MODE + convertRttPhoneId(mPhoneId), defaultRttMode);
-        Log.i(ImsManager.class.getSimpleName(), "defaultRttMode = " + defaultRttMode +
-                "rttMode = " + rttMode);
-        if (getBooleanCarrierConfig(CarrierConfigManager.KEY_RTT_ALWAYS_ENABLED_BOOL)
-                && rttMode == defaultRttMode) {
+        if (getBooleanCarrierConfig(CarrierConfigManager.KEY_RTT_ALWAYS_ENABLED_BOOL)) {
             Settings.Secure.putInt(mContext.getContentResolver(),
-                    Settings.Secure.RTT_CALLING_MODE + convertRttPhoneId(mPhoneId),
-                    defaultRttMode);
+                    Settings.Secure.RTT_CALLING_MODE + convertRttPhoneId(mPhoneId), 1);
         }
         boolean isRttUiSettingEnabled = Settings.Secure.getInt(mContext.getContentResolver(),
                 Settings.Secure.RTT_CALLING_MODE + convertRttPhoneId(mPhoneId), 0) != 0;
         boolean isRttAlwaysOnCarrierConfig = getBooleanCarrierConfig(
-                CarrierConfigManager.KEY_IGNORE_RTT_MODE_SETTING_BOOL) ||
-                getBooleanCarrierConfig(CarrierConfigManager.KEY_RTT_ALWAYS_ENABLED_BOOL);
+                CarrierConfigManager.KEY_IGNORE_RTT_MODE_SETTING_BOOL);
 
         boolean shouldImsRttBeOn = isRttUiSettingEnabled || isRttAlwaysOnCarrierConfig;
         Log.i(ImsManager.class.getSimpleName(), "update RTT: settings value: "
